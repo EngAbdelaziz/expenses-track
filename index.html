@@ -61,10 +61,11 @@
                 redirect: "follow",
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type": "text/plain;charset=utf-8',
                 },
                 body: JSON.stringify(expense),
             })
+                
             .then(response => response.json()) // استخدام response.json() بدون mode: 'no-cors'
             .then(data => {
                 console.log('نجاح:', data);
