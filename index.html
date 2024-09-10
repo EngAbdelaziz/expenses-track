@@ -55,18 +55,20 @@
             }
             return null;
         }
-
 function sendExpense(expense) {
     fetch(SCRIPT_URL, {
-        redirect: "follow",
-        method: 'POST', // تأكد من استخدام POST هنا
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(expense),
-        mode: 'no-cors' // حاول هذا الوضع
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.result === 'Success') {
             console.log('Success:', data);
@@ -78,7 +80,7 @@ function sendExpense(expense) {
     })
     .catch(error => {
         console.error('Error:', error);
-        document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات.';
+        document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات: ' + error.message;
     });
 }
 
