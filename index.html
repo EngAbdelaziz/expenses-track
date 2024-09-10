@@ -55,35 +55,26 @@
             }
             return null;
         }
-function sendExpense(expense) {
-    fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(expense),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok. Status: ' + response.status);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.result === 'Success') {
-            console.log('Success:', data);
-            document.getElementById('status').innerText = 'تم حفظ المصروفات بنجاح.';
-        } else {
-            console.error('Error:', data.message);
-            document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات: ' + data.message;
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات: ' + error.message;
-    });
-}
-
+fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors', // تفعيل الوضع no-cors
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(expense),
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Network response was not ok. Status: ' + response.status);
+    }
+    return response.json();
+})
+.then(data => {
+    console.log('Success:', data);
+})
+.catch(error => {
+    console.error('Error:', error);
+});
 
     </script>
 </head>
