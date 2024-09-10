@@ -62,11 +62,10 @@ function sendExpense(expense) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(expense),
-        mode: 'no-cors' // حاول هذا الوضع
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('Network response was not ok. Status: ' + response.status);
         }
         return response.json();
     })
