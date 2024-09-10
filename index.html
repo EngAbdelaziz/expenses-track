@@ -51,22 +51,21 @@
             const pattern = /([\d\.]+) ريال (.+)/;
             const match = text.match(pattern);
             if (match) {
-                return { amount: parseFloat(match[1]), description: match[2].trim() };
+                return `amount=${encodeURIComponent(match[1])}&description=${encodeURIComponent(match[2].trim())}`;
             }
             return null;
         }
 
-        function sendExpense(expense) {
+        function sendExpense(expenseString) {
             fetch(SCRIPT_URL, {
                 redirect: "follow",
                 method: 'POST',
                 headers: {
-                    'Content-Type": "text/plain;charset=utf-8',
+                    'Content-Type': 'text/plain;charset=utf-8',
                 },
-                body: JSON.stringify(expense),
+                body: expenseString, // إرسال البيانات كنص عادي
             })
-                
-            .then(response => response.json()) // استخدام response.json() بدون mode: 'no-cors'
+            .then(response => response.text()) // قراءة الاستجابة كنص
             .then(data => {
                 console.log('نجاح:', data);
                 document.getElementById('status').innerText = 'تم حفظ المصروفات بنجاح.';
