@@ -6,7 +6,7 @@
     <title>تتبع المصروفات بالأوامر الصوتية</title>
     <script src="https://apis.google.com/js/api.js"></script>
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbynut7UhTGWRSwuFof9iV58qrq04QtNcwGLdpPD4Wa32FVy83mdkEtHS_oHMKFjrkg5KA/exec';
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbynut7UhTGWRSwuFof9iV58qrq04QtNcwGLdpPD4Wa32FVy83mdkEtHS_oHMKFjrkg5KA/exec";
         
         function startListening() {
             if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
@@ -62,6 +62,7 @@ function sendExpense(expense) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(expense),
+        mode: 'no-cors' // حاول هذا الوضع
     })
     .then(response => {
         if (!response.ok) {
