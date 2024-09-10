@@ -4,44 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تتبع المصروفات بالأوامر الصوتية</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        #expenses-list {
-            margin-top: 20px;
-            padding: 0;
-            list-style-type: none;
-        }
-        #expenses-list li {
-            padding: 8px;
-            border-bottom: 1px solid #ccc;
-        }
-    </style>
-</head>
-<body>
-    <h1>تتبع المصروفات باستخدام الأوامر الصوتية</h1>
-    <button onclick="startListening()">أضف مصروفات</button>
-    <p id="status">اضغط على الزر وابدأ بالحديث...</p>
-    <ul id="expenses-list">
-    </ul>
-
+    <script src="https://apis.google.com/js/api.js"></script>
     <script>
-        let expenses = [];
-
+        const SCRIPT_URL = 'YOUR_SCRIPT_URL';
+        
         function startListening() {
-            if (!('webkitSpeechRecognition' in window)) {
-                document.getElementById('status').innerText = 'التعرف على الصوت غير مدعوم في هذا المتصفح.';
+            if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+                alert('التعرف على الصوت غير مدعوم في هذا المتصفح.');
                 return;
             }
 
-            const recognition = new webkitSpeechRecognition();
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
             recognition.lang = 'ar-SA';
             recognition.continuous = false;
             recognition.interimResults = false;
@@ -51,13 +24,13 @@
             };
 
             recognition.onresult = function(event) {
-                const speechResult = event.results[0][0].transcript;
-                document.getElementById('status').innerText = 'سمعت: ' + speechResult;
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('status').innerText = 'سمعت: ' + transcript;
 
-                const expense = parseExpense(speechResult);
+                // معالجة النصوص لإضافة المصروفات
+                const expense = parseExpense(transcript);
                 if (expense) {
-                    expenses.push(expense);
-                    updateExpensesList();
+                    sendExpense(expense);
                 } else {
                     document.getElementById('status').innerText = 'لم أتمكن من فهم المصروف.';
                 }
@@ -74,24 +47,38 @@
             recognition.start();
         }
 
-        function parseExpense(speechResult) {
-            const expensePattern = /([\d\.]+) ريال (.+)/;
-            const match = speechResult.match(expensePattern);
+        function parseExpense(text) {
+            const pattern = /([\d\.]+) ريال (.+)/;
+            const match = text.match(pattern);
             if (match) {
                 return { amount: parseFloat(match[1]), description: match[2].trim() };
             }
             return null;
         }
 
-        function updateExpensesList() {
-            const list = document.getElementById('expenses-list');
-            list.innerHTML = '';
-            expenses.forEach(expense => {
-                const listItem = document.createElement('li');
-                listItem.innerText = `${expense.amount} ريال - ${expense.description}`;
-                list.appendChild(listItem);
+        function sendExpense(expense) {
+            fetch(https://script.google.com/macros/s/AKfycbyF9oNApMLz88r9av3zf5zm9iHgIl1DGHu-iQT_7qBl5gWSL5WmoI6r-Xn5ddXhRC1DYg/exec, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(expense),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                document.getElementById('status').innerText = 'تم حفظ المصروفات بنجاح.';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات.';
             });
         }
     </script>
+</head>
+<body>
+    <h1>تتبع المصروفات باستخدام الأوامر الصوتية</h1>
+    <button onclick="startListening()">ابدأ الاستماع</button>
+    <p id="status">اضغط على الزر وابدأ بالحديث...</p>
 </body>
 </html>
