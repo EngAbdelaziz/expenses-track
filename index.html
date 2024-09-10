@@ -62,7 +62,7 @@ function sendExpense(expense) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(expense),
-	Mode: "no_core
+    mode: 'no-cors', // تفعيل الوضع no-cors
     })
     .then(response => {
         if (!response.ok) {
