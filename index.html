@@ -6,7 +6,7 @@
     <title>تتبع المصروفات بالأوامر الصوتية</title>
     <script src="https://apis.google.com/js/api.js"></script>
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzE0BopQfzT_S7jA_mJ-xydpiLcTlY-w_cQ9ikoaWcsiO7QFkh-q5TIZF0jusSX-DiLsA/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbynut7UhTGWRSwuFof9iV58qrq04QtNcwGLdpPD4Wa32FVy83mdkEtHS_oHMKFjrkg5KA/exec';
         
         function startListening() {
             if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
@@ -57,23 +57,29 @@
         }
 
         function sendExpense(expense) {
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(expense),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                document.getElementById('status').innerText = 'تم حفظ المصروفات بنجاح.';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات.';
-            });
+    fetch(SCRIPT_URL, {
+        method: 'POST', // تأكد من استخدام POST هنا
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(expense),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.result === 'Success') {
+            console.log('Success:', data);
+            document.getElementById('status').innerText = 'تم حفظ المصروفات بنجاح.';
+        } else {
+            console.error('Error:', data.message);
+            document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات: ' + data.message;
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات.';
+    });
+}
+
     </script>
 </head>
 <body>
