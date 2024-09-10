@@ -56,7 +56,7 @@
             return null;
         }
 
-        function sendExpense(expense) {
+function sendExpense(expense) {
     fetch(SCRIPT_URL, {
         method: 'POST', // تأكد من استخدام POST هنا
         headers: {
@@ -79,6 +79,7 @@
         document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات.';
     });
 }
+
 
     </script>
 </head>
