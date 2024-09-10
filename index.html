@@ -6,7 +6,7 @@
     <title>تتبع المصروفات بالأوامر الصوتية</title>
     <script src="https://apis.google.com/js/api.js"></script>
     <script>
-        const SCRIPT_URL = 'YOUR_SCRIPT_URL';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyF9oNApMLz88r9av3zf5zm9iHgIl1DGHu-iQT_7qBl5gWSL5WmoI6r-Xn5ddXhRC1DYg/exec';
         
         function startListening() {
             if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
@@ -57,7 +57,7 @@
         }
 
         function sendExpense(expense) {
-            fetch(https://script.google.com/macros/s/AKfycbyF9oNApMLz88r9av3zf5zm9iHgIl1DGHu-iQT_7qBl5gWSL5WmoI6r-Xn5ddXhRC1DYg/exec, {
+            fetch(SCRIPT_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
