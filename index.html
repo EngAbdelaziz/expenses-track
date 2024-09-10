@@ -55,36 +55,25 @@
             }
             return null;
         }
-function sendExpense(expense) {
-    fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(expense),
-        mode: 'no-cors',
 
-    })
-    .then(response => {
-        if (response.status === 0) {
-            console.log('Network error or CORS issue detected.');
-            throw new Error('Network response was not ok. Status: 0');
+        function sendExpense(expense) {
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(expense),
+            })
+            .then(response => response.json()) // استخدام response.json() بدون mode: 'no-cors'
+            .then(data => {
+                console.log('نجاح:', data);
+                document.getElementById('status').innerText = 'تم حفظ المصروفات بنجاح.';
+            })
+            .catch(error => {
+                console.error('خطأ:', error.message);
+                document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات: ' + error.message;
+            });
         }
-        if (!response.ok) {
-            throw new Error('Network response was not ok. Status: ' + response.status);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Success:', data);
-        document.getElementById('status').innerText = 'تم حفظ المصروفات بنجاح.';
-    })
-    .catch(error => {
-        console.error('Error:', error.message);
-        document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات: ' + error.message;
-    });
-}
-
     </script>
 </head>
 <body>
