@@ -64,6 +64,7 @@ function sendExpense(expense) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(expense),
+        mode: 'no-cors' // حاول هذا الوضع
     })
     .then(response => response.json())
     .then(data => {
