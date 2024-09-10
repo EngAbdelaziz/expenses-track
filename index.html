@@ -62,29 +62,26 @@ function sendExpense(expense) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(expense),
-    mode: 'no-cors', // تفعيل الوضع no-cors
     })
     .then(response => {
+        if (response.status === 0) {
+            console.log('Network error or CORS issue detected.');
+            throw new Error('Network response was not ok. Status: 0');
+        }
         if (!response.ok) {
             throw new Error('Network response was not ok. Status: ' + response.status);
         }
         return response.json();
     })
     .then(data => {
-        if (data.result === 'Success') {
-            console.log('Success:', data);
-            document.getElementById('status').innerText = 'تم حفظ المصروفات بنجاح.';
-        } else {
-            console.error('Error:', data.message);
-            document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات: ' + data.message;
-        }
+        console.log('Success:', data);
+        document.getElementById('status').innerText = 'تم حفظ المصروفات بنجاح.';
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error('Error:', error.message);
         document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات: ' + error.message;
     });
 }
-
 
     </script>
 </head>
