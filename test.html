@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تتبع المصروفات بالأوامر الصوتية</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #expenses-list {
+            margin-top: 20px;
+            padding: 0;
+            list-style-type: none;
+        }
+        #expenses-list li {
+            padding: 8px;
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>تتبع المصروفات باستخدام الأوامر الصوتية</h1>
+    <button onclick="startListening()">أضف مصروفات</button>
+    <p id="status">اضغط على الزر وابدأ بالحديث...</p>
+    <ul id="expenses-list">
+    </ul>
+
+    <script>
+        let expenses = [];
+
+        function startListening() {
+            if (!('webkitSpeechRecognition' in window)) {
+                document.getElementById('status').innerText = 'التعرف على الصوت غير مدعوم في هذا المتصفح.';
+                return;
+            }
+
+            const recognition = new webkitSpeechRecognition();
+            recognition.lang = 'ar-SA';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onstart = function() {
+                document.getElementById('status').innerText = 'الاستماع جاري...';
+            };
+
+            recognition.onresult = function(event) {
+                const speechResult = event.results[0][0].transcript;
+                document.getElementById('status').innerText = 'سمعت: ' + speechResult;
+
+                const expense = parseExpense(speechResult);
+                if (expense) {
+                    expenses.push(expense);
+                    updateExpensesList();
+                } else {
+                    document.getElementById('status').innerText = 'لم أتمكن من فهم المصروف.';
+                }
+            };
+
+            recognition.onerror = function(event) {
+                document.getElementById('status').innerText = 'حدث خطأ: ' + event.error;
+            };
+
+            recognition.onend = function() {
+                document.getElementById('status').innerText += ' انتهى الاستماع.';
+            };
+
+            recognition.start();
+        }
+
+        function parseExpense(speechResult) {
+            const expensePattern = /([\d\.]+) ريال (.+)/;
+            const match = speechResult.match(expensePattern);
+            if (match) {
+                return { amount: parseFloat(match[1]), description: match[2].trim() };
+            }
+            return null;
+        }
+
+        function updateExpensesList() {
+            const list = document.getElementById('expenses-list');
+            list.innerHTML = '';
+            expenses.forEach(expense => {
+                const listItem = document.createElement('li');
+                listItem.innerText = `${expense.amount} ريال - ${expense.description}`;
+                list.appendChild(listItem);
+            });
+        }
+    </script>
+</body>
+</html>
