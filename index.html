@@ -57,12 +57,12 @@
         }
 function sendExpense(expense) {
     fetch(SCRIPT_URL, {
-        method: 'POST', // تأكد من أن method هي POST
-        mode: 'no-cors', // تفعيل الوضع no-cors
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(expense),
+	Mode: "no_core
     })
     .then(response => {
         if (!response.ok) {
@@ -76,7 +76,7 @@ function sendExpense(expense) {
             document.getElementById('status').innerText = 'تم حفظ المصروفات بنجاح.';
         } else {
             console.error('Error:', data.message);
-            document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات: ' + data.message.
+            document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات: ' + data.message;
         }
     })
     .catch(error => {
@@ -84,6 +84,7 @@ function sendExpense(expense) {
         document.getElementById('status').innerText = 'حدث خطأ أثناء حفظ المصروفات: ' + error.message;
     });
 }
+
 
     </script>
 </head>
