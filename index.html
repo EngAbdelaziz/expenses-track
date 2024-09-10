@@ -58,6 +58,7 @@
 
 function sendExpense(expense) {
     fetch(SCRIPT_URL, {
+        redirect: "follow",
         method: 'POST', // تأكد من استخدام POST هنا
         headers: {
             'Content-Type': 'application/json',
