@@ -108,11 +108,55 @@
             // (استخدم الحلول المتاحة لتحليل النص بشكل أكثر دقة إذا لزم الأمر)
         }
 
+        
         document.getElementById("form").addEventListener("submit", function (e) {
             e.preventDefault();
-            // إرسال البيانات عند تقديم النموذج
+            document.getElementById("message").textContent = "جارٍ الإرسال...";
+            document.getElementById("message").style.display = "block";
+            document.getElementById("submit-button").disabled = true;
+
+            var formData = new FormData(this);
+            var keyValuePairs = [];
+            for (var pair of formData.entries()) {
+              keyValuePairs.push(pair[0] + "=" + pair[1]);
+            }
+
+            var formDataString = keyValuePairs.join("&");
+
+            fetch("https://script.google.com/macros/s/AKfycbzFqfs_PLLDG61SYSWhXmmWnAPxi9fhu2RYJhyVxJ1YCgNb1pkubmUM9RVJB9O3AbMH/exec", {
+                redirect: "follow",
+                method: "POST",
+                body: formDataString,
+                headers: {
+                  "Content-Type": "text/plain;charset=utf-8",
+                },
+            })
+            .then(function (response) {
+                if (response) {
+                    return response;
+                } else {
+                    throw new Error("فشل في إرسال النموذج.");
+                }
+            })
+            .then(function (data) {
+                document.getElementById("message").textContent = "تم إرسال البيانات بنجاح!";
+                document.getElementById("message").style.display = "block";
+                document.getElementById("message").style.backgroundColor = "green";
+                document.getElementId("message").style.color = "beige";
+                document.getElementById("submit-button").disabled = false;
+                document.getElementById("form").reset();
+
+                setTimeout(function () {
+                  document.getElementById("message").textContent = "";
+                  document.getElementById("message").style.display = "none";
+                }, 2600);
+            })
+            .catch(function (error) {
+                console.error(error);
+                document.getElementById("message").textContent = "حدث خطأ أثناء إرسال النموذج.";
+                document.getElementById("message").style.display = "block";
+            });
         });
     </script>
 </body>
 </html>
-
