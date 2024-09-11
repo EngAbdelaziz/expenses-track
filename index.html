@@ -104,9 +104,46 @@
         }
 
         function parseAndFillForm(transcript) {
-            // تحليل النص وتعبئة النموذج بناءً على البيانات المستلمة
-            // (استخدم الحلول المتاحة لتحليل النص بشكل أكثر دقة إذا لزم الأمر)
-        }
+    // قم بتحليل النص بناءً على الأنماط التي قد تتوقعها
+    const amountPattern = /(\d+)\s*ريال/;  // للبحث عن المبالغ
+    const categoryPattern = /(نوع|الاجبان|الخبز|الخضار|الفاكهة|اللحوم)/; // تصنيفات مختلفة يمكن تعديلها حسب الحاجة
+    const paymentPattern = /(STC|SNB|كاش)/; // طرق الدفع
+    const unexpectedPattern = /(غير مخطط له|مفاجئ)/; // حالة غير المخطط لها
+
+    const amountMatch = transcript.match(amountPattern);
+    const categoryMatch = transcript.match(categoryPattern);
+    const paymentMatch = transcript.match(paymentPattern);
+    const unexpectedMatch = transcript.match(unexpectedPattern);
+
+    if (amountMatch) {
+        document.getElementById('amount').value = amountMatch[1];
+    }
+    if (categoryMatch) {
+        document.getElementById('category').value = categoryMatch[0];
+    }
+    if (paymentMatch) {
+        document.getElementById(paymentMatch[0]).checked = true;
+    }
+    if (unexpectedMatch) {
+        document.getElementById('unexpected').checked = true;
+    }
+
+    // تعيين تاريخ اليوم إذا ذكر في النص
+    if (transcript.includes("اليوم")) {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('Date').value = today;
+    }
+
+    // تعيين الوصف من النص المتبقي
+    const description = transcript.replace(amountPattern, '')
+                                  .replace(categoryPattern, '')
+                                  .replace(paymentPattern, '')
+                                  .replace(unexpectedPattern, '')
+                                  .replace('اليوم', '') // إزالة كلمة "اليوم" من الوصف
+                                  .trim();
+    document.getElementById('disc').value = description;
+}
+
 
         
         document.getElementById("form").addEventListener("submit", function (e) {
