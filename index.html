@@ -1,198 +1,118 @@
-
 <!DOCTYPE html>
-<html>
-  <head>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
-    />
-  </head>
-  <body>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تتبع المصروفات بالأوامر الصوتية</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
     <section class="hero is-primary is-bold">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">Data Entry Form</h1>
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">نموذج إدخال البيانات بالأوامر الصوتية</h1>
+            </div>
         </div>
-      </div>
     </section>
+
     <form id="form" class="container m-4 pl-4" method="POST">
-      <div class="field">
-        <label class="label">Client Name</label>
-        <div class="control">
-          <input
-            class="input"
-            type="text"
-            placeholder="Your Client Name"
-            name="Client Name"
-          />
+        <div class="field">
+            <label class="label">الوصف</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="الوصف" name="disc" id="disc">
+            </div>
         </div>
-      </div>
-
-      <!-- <div class="field">
-        <label class="label">Last Name</label>
-        <div class="control">
-          <input
-            class="input"
-            type="text"
-            placeholder="Your Last Name"
-            name="Last Name"
-          />
+        <div class="field">
+            <label class="label">النوع</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="النوع" name="category" id="category">
+            </div>
         </div>
-      </div> -->
-
-      <div class="field">
-        <label class="label">Email</label>
-        <div class="control">
-          <input
-            class="input"
-            type="email"
-            placeholder="Your Email"
-            name="Email"
-          />
+        <div class="field">
+            <label class="label">السعر</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="السعر" name="amount" id="amount">
+            </div>
         </div>
-      </div>
-
-      <div class="field">
-        <label class="label">Password</label>
-        <div class="control">
-          <input
-            class="input"
-            type="password"
-            placeholder="Your Password"
-            name="Password"
-          />
+        <div class="field">
+            <label class="label">التاريخ</label>
+            <div class="control">
+                <input class="input" type="date" placeholder="تاريخ الشراء" name="Date" id="Date">
+            </div>
         </div>
-      </div>
-
-      <div class="field">
-        <label class="label">Date of Birth</label>
-        <div class="control">
-          <input
-            class="input"
-            type="date"
-            placeholder="Your Date of Birth"
-            name="DOB"
-          />
+        <div class="field">
+            <label class="label">طريقة الدفع</label>
+            <div class="control">
+                <label class="radio">
+                    <input type="radio" name="payment" value="STC" id="bank1"> STC
+                </label>
+                <label class="radio">
+                    <input type="radio" name="payment" value="SNB" id="bank2"> SNB
+                </label>
+                <label class="radio">
+                    <input type="radio" name="payment" value="كاش" id="cash"> كاش
+                </label>
+            </div>
         </div>
-      </div>
-
-      <div class="field">
-        <label class="label">Gender</label>
-        <div class="control">
-          <label class="radio">
-            <input type="radio" name="Gender" value="male" /> Male
-          </label>
-          <label class="radio">
-            <input type="radio" name="Gender" value="female" /> Female
-          </label>
+        <div class="field">
+            <label class="label">غير مخطط له</label>
+            <div class="control">
+                <label class="checkbox">
+                    <input type="checkbox" name="unexpected" id="unexpected"> نعم
+                </label>
+            </div>
         </div>
-      </div>
-
-      <div class="field">
-        <label class="label">Agree to Terms</label>
-        <div class="control">
-          <label class="checkbox">
-            <input type="checkbox" name="Agree To Terms" value="yes" /> I agree
-            to the terms and conditions
-          </label>
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-info" type="button" onclick="startListening()">🎤 ابدأ الاستماع</button>
+            </div>
+            <div class="control">
+                <button class="button is-primary" type="submit" id="submit-button">إرسال</button>
+            </div>
+            <div class="control">
+                <button class="button is-danger" type="button">إلغاء</button>
+            </div>
         </div>
-      </div>
-
-      <div class="field">
-        <label class="label">Additional Information</label>
-        <div class="control">
-          <textarea
-            class="textarea"
-            placeholder="Any additional information"
-            name="Notes"
-          ></textarea>
-        </div>
-      </div>
-
-      <div class="field is-grouped">
-        <div class="control">
-          <button class="button is-primary" type="submit" id="submit-button">
-            Sign Up
-          </button>
-        </div>
-        <div class="control">
-          <button class="button is-danger">Cancel</button>
-        </div>
-      </div>
     </form>
-    <div
-      id="message"
-      style="
-        display: none;
-        margin: 20px;
-        font-weight: bold;
-        color: green;
-        padding: 8px;
-        background-color: beige;
-        border-radius: 4px;
-        border-color: aquamarine;
-      "
-    ></div>
+
+    <div id="message" style="display: none; margin: 20px; font-weight: bold; color: green; padding: 8px; background-color: beige; border-radius: 4px; border-color: aquamarine;"></div>
 
     <script>
-      document.getElementById("form").addEventListener("submit", function (e) {
-        e.preventDefault(); // Prevent the default form submission
-        document.getElementById("message").textContent = "Submitting..";
-        document.getElementById("message").style.display = "block";
-        document.getElementById("submit-button").disabled = true;
+        function startListening() {
+            if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+                alert('التعرف على الصوت غير مدعوم في هذا المتصفح.');
+                return;
+            }
 
-        // Collect the form data
-        var formData = new FormData(this);
-        var keyValuePairs = [];
-        for (var pair of formData.entries()) {
-          keyValuePairs.push(pair[0] + "=" + pair[1]);
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'ar-SA';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('message').textContent = 'سمعت: ' + transcript;
+                document.getElementById('message').style.display = 'block';
+                parseAndFillForm(transcript);
+            };
+
+            recognition.onerror = function(event) {
+                console.error('حدث خطأ: ' + event.error);
+            };
+
+            recognition.start();
         }
 
-        var formDataString = keyValuePairs.join("&");
+        function parseAndFillForm(transcript) {
+            // تحليل النص وتعبئة النموذج بناءً على البيانات المستلمة
+            // (استخدم الحلول المتاحة لتحليل النص بشكل أكثر دقة إذا لزم الأمر)
+        }
 
-        // Send a POST request to your Google Apps Script
-        fetch(
-          "https://script.google.com/macros/s/AKfycbzFqfs_PLLDG61SYSWhXmmWnAPxi9fhu2RYJhyVxJ1YCgNb1pkubmUM9RVJB9O3AbMH/exec",
-          {
-            redirect: "follow",
-            method: "POST",
-            body: formDataString,
-            headers: {
-              "Content-Type": "text/plain;charset=utf-8",
-            },
-          }
-        )
-          .then(function (response) {
-            // Check if the request was successful
-            if (response) {
-              return response; // Assuming your script returns JSON response
-            } else {
-              throw new Error("Failed to submit the form.");
-            }
-          })
-          .then(function (data) {
-            // Display a success message
-            document.getElementById("message").textContent =
-              "Data submitted successfully!";
-            document.getElementById("message").style.display = "block";
-            document.getElementById("message").style.backgroundColor = "green";
-            document.getElementById("message").style.color = "beige";
-            document.getElementById("submit-button").disabled = false;
-            document.getElementById("form").reset();
-
-            setTimeout(function () {
-              document.getElementById("message").textContent = "";
-              document.getElementById("message").style.display = "none";
-            }, 2600);
-          })
-          .catch(function (error) {
-            // Handle errors, you can display an error message here
-            console.error(error);
-            document.getElementById("message").textContent =
-              "An error occurred while submitting the form.";
-            document.getElementById("message").style.display = "block";
-          });
-      });
+        document.getElementById("form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            // إرسال البيانات عند تقديم النموذج
+        });
     </script>
-  </body>
+</body>
 </html>
+
